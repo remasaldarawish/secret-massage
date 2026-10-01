@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Message | مدرسة السلام الثانوية الشاملة المختلطة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --pink:#f472a0;
+    --pink-soft:#ffe3ee;
+    --pink-bg:#fff5f9;
+    --ink:#3a3a44;
+    --gray:#8b8b96;
+    --green:#3ecf8e;
+    --radius:20px;
+    --shadow:0 10px 30px rgba(244,114,160,.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
+  body{
+    background:var(--pink-bg);
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ===== خلفية ناعمة متحركة ===== */
+  .blob{
+    position:fixed;border-radius:50%;filter:blur(70px);opacity:.45;z-index:0;
+    animation:float 14s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .blob.b1{width:340px;height:340px;background:#ffd0e2;top:-80px;right:-80px}
+  .blob.b2{width:280px;height:280px;background:#ffe9f2;bottom:5%;left:-90px;animation-delay:-5s}
+  .blob.b3{width:200px;height:200px;background:#ffc4da;top:45%;right:-70px;animation-delay:-9s}
+  @keyframes float{
+    0%,100%{transform:translateY(0) scale(1)}
+    50%{transform:translateY(-30px) scale(1.06)}
+  }
+  .dot{
+    position:fixed;border-radius:50%;background:var(--pink);opacity:.18;z-index:0;
+    animation:rise linear infinite;pointer-events:none;
+  }
+  @keyframes rise{
+    from{transform:translateY(110vh) rotate(0)}
+    to{transform:translateY(-15vh) rotate(360deg)}
+  }
+
+  .wrap{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:0 18px 60px}
+
+  /* ===== الترويسة ===== */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 4px;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem;
+  }
+  .logo .icon{
+    width:42px;height:42px;border-radius:14px;background:var(--pink);
+    display:grid;place-items:center;color:#fff;font-size:1.2rem;
+    box-shadow:var(--shadow);
+    animation:wiggle 5s ease-in-out infinite;
+  }
+  @keyframes wiggle{0%,100%{transform:rotate(0)}5%{transform:rotate(-8deg)}10%{transform:rotate(6deg)}15%{transform:rotate(0)}}
+  .badge{
+    background:#fff;border:1.5px solid var(--pink-soft);color:var(--pink);
+    padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:700;
+    box-shadow:var(--shadow);
+  }
+
+  /* ===== البطل ===== */
+  .hero{text-align:center;padding:34px 0 10px}
+  .hero .lock{
+    width:74px;height:74px;margin:0 auto 16px;border-radius:24px;
+    background:linear-gradient(135deg,var(--pink),#ff9dc0);
+    display:grid;place-items:center;font-size:2rem;color:#fff;
+    box-shadow:0 15px 35px rgba(244,114,160,.35);
+    animation:bob 3.5s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .hero h1{font-size:clamp(1.6rem,5.5vw,2.3rem);font-weight:800;margin-bottom:10px}
+  .hero h1 span{color:var(--pink)}
+  .hero p{color:var(--gray);font-size:1rem;max-width:440px;margin:0 auto;line-height:1.8}
+
+  /* ===== البطاقات ===== */
+  .card{
+    background:#fff;border-radius:var(--radius);padding:24px 22px;
+    box-shadow:var(--shadow);border:1px solid #ffe9f2;
+    margin-top:26px;
+    animation:pop .6s ease both;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .card h2{
+    font-size:1.2rem;font-weight:800;margin-bottom:6px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card .sub{color:var(--gray);font-size:.9rem;margin-bottom:16px}
+
+  label{display:block;font-weight:700;font-size:.92rem;margin-bottom:8px}
+  .subject-box{
+    background:var(--pink-bg);border:1.5px dashed var(--pink);
+    border-radius:14px;padding:12px 16px;font-weight:800;color:var(--pink);
+    display:flex;align-items:center;gap:8px;margin-bottom:18px;
+  }
+  textarea{
+    width:100%;min-height:150px;resize:vertical;
+    border:1.5px solid #f3d3e0;border-radius:14px;padding:14px 16px;
+    font-size:1rem;line-height:1.8;color:var(--ink);
+    background:#fffdfefe;outline:none;transition:.25s;
+  }
+  textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
+  textarea::placeholder{color:#c3b3bc}
+  .hint{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:8px;font-size:.8rem;color:var(--gray);
+  }
+  .privacy-note{
+    display:flex;gap:8px;align-items:flex-start;
+    background:#fff8e6;border:1px solid #ffe3a3;color:#8a6d1a;
+    border-radius:12px;padding:10px 14px;font-size:.82rem;line-height:1.7;
+    margin-top:14px;
+  }
+  .filter-preview{
+    margin-top:12px;background:var(--pink-bg);border-radius:12px;
+    padding:10px 14px;font-size:.82rem;color:var(--gray);
+    display:none;line-height:1.7;
+  }
+  .filter-preview.show{display:block;animation:pop .3s ease}
+  .filter-preview b{color:var(--pink)}
+
+  /* ===== الزر ===== */
+  .btn{
+    width:100%;border:none;cursor:pointer;
+    background:linear-gradient(135deg,var(--pink),#ff7fae);
+    color:#fff;font-size:1.05rem;font-weight:800;
+    padding:15px;border-radius:16px;margin-top:18px;
+    box-shadow:0 10px 25px rgba(244,114,160,.35);
+    transition:transform .15s, box-shadow .15s;
+    position:relative;overflow:hidden;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(244,114,160,.45)}
+  .btn:active{transform:scale(.97)}
+  .btn:disabled{opacity:.6;cursor:wait}
+  .btn.ghost{
+    background:#fff;color:var(--pink);border:1.5px solid var(--pink);
+    box-shadow:none;
+  }
+  .btn.green{
+    background:linear-gradient(135deg,var(--green),#57dba2);
+    box-shadow:0 10px 25px rgba(62,207,142,.3);
+  }
+
+  /* ===== شاشة النجاح ===== */
+  .success{display:none;text-align:center}
+  .success.show{display:block;animation:pop .5s ease}
+  .success .check{
+    width:80px;height:80px;margin:6px auto 14px;border-radius:50%;
+    background:linear-gradient(135deg,var(--green),#6fe3ae);
+    display:grid;place-items:center;font-size:2.2rem;color:#fff;
+    box-shadow:0 12px 30px rgba(62,207,142,.35);
+    animation:bounceIn .6s cubic-bezier(.68,-.55,.27,1.55);
+  }
+  @keyframes bounceIn{from{transform:scale(0)}to{transform:scale(1)}}
+  .code-box{
+    background:var(--pink-bg);border:2px dashed var(--pink);
+    border-radius:16px;padding:16px;margin:16px 0 6px;
+    font-size:1.8rem;font-weight:800;letter-spacing:4px;color:var(--pink);
+    user-select:all;direction:ltr;
+  }
+  .copy-btn{
+    background:none;border:none;color:var(--gray);font-size:.8rem;cursor:pointer;
+    text-decoration:underline;margin-top:4px;
+  }
+
+  /* ===== المتابعة ===== */
+  .track-input{
+    width:100%;border:1.5px solid #f3d3e0;border-radius:14px;
+    padding:14px 16px;font-size:1.1rem;font-weight:700;text-align:center;
+    letter-spacing:3px;outline:none;direction:ltr;transition:.25s;
+  }
+  .track-input:focus{border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
+  .reply-view{margin-top:18px;display:none}
+  .reply-view.show{display:block;animation:pop .4s ease}
+  .msg-bubble{
+    background:var(--pink-bg);border-radius:14px 14px 14px 4px;
+    padding:14px 16px;line-height:1.9;font-size:.95rem;margin-bottom:12px;
+    border:1px solid #ffe0ec;
+  }
+  .msg-bubble.reply{
+    background:#eefaf4;border-color:#c9ecd9;border-radius:14px 14px 4px 14px;
+  }
+  .msg-bubble .who{font-size:.75rem;font-weight:800;color:var(--pink);margin-bottom:4px;display:block}
+  .msg-bubble.reply .who{color:var(--green)}
+  .status-pill{
+    display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:800;
+  }
+  .status-pill.wait{background:#fff3d6;color:#9a7200}
+  .status-pill.done{background:#dcf7ea;color:#177a4c}
+  .error-text{color:#d33;font-size:.85rem;margin-top:8px;display:none}
+
+  /* ===== الرسائل الإرشادية ===== */
+  .tips{display:grid;gap:12px;margin-top:16px}
+  .tip{
+    background:#fff;border:1px solid #ffe9f2;border-radius:16px;
+    padding:14px 18px;display:flex;gap:12px;align-items:flex-start;
+    box-shadow:0 4px 14px rgba(244,114,160,.07);
+    transition:transform .2s, box-shadow .2s;cursor:default;
+  }
+  .tip:hover{transform:translateY(-4px) rotate(-.5deg);box-shadow:0 12px 26px rgba(244,114,160,.16)}
+  .tip .emo{font-size:1.5rem;animation:bob 4s ease-in-out infinite;flex-shrink:0}
+  .tip p{font-size:.9rem;line-height:1.8;color:#55555f}
+  .tip p b{color:var(--ink)}
+
+  footer{
+    text-align:center;color:var(--gray);font-size:.82rem;line-height:1.9;
+    margin-top:50px;padding-top:20px;border-top:1px dashed #f3cfdd;
+  }
+  footer b{color:var(--ink)}
+
+  /* قصاصات الورق عند الإرسال */
+  .confetti{position:fixed;top:-10px;width:10px;height:14px;z-index:99;border-radius:3px;pointer-events:none}
+
+  @media (max-width:480px){
+    .card{padding:20px 16px}
+    .code-box{font-size:1.4rem}
+  }
+
+#adminArea :root{
+    --pink:#f472a0;
+    --pink-soft:#ffe3ee;
+    --pink-bg:#fff5f9;
+    --ink:#3a3a44;
+    --gray:#8b8b96;
+    --green:#3ecf8e;
+    --amber:#f2b63c;
+    --radius:20px;
+    --shadow:0 10px 30px rgba(244,114,160,.15);
+  }
+#adminArea *{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal',sans-serif}
+#adminArea body{background:var(--pink-bg);color:var(--ink);min-height:100vh;position:relative;overflow-x:hidden}
+#adminArea .blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.4;z-index:0;pointer-events:none;animation:float 14s ease-in-out infinite}
+#adminArea .blob.b1{width:320px;height:320px;background:#ffd0e2;top:-80px;left:-80px}
+#adminArea .blob.b2{width:260px;height:260px;background:#ffe9f2;bottom:3%;right:-80px;animation-delay:-6s}
+#adminArea 0%, #adminArea 100%{transform:translateY(0)}
+#adminArea 50%{transform:translateY(-25px)}
+#adminArea .wrap{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:0 18px 60px}
+#adminArea /* ===== تسجيل الدخول ===== */
+  #loginView{max-width:400px;margin:0 auto;padding-top:10vh}
+#adminArea .login-card{background:#fff;border-radius:26px;padding:34px 28px;box-shadow:var(--shadow);border:1px solid #ffe9f2;text-align:center;animation:pop .5s ease both}
+#adminArea .login-icon{width:76px;height:76px;margin:0 auto 14px;border-radius:24px;background:linear-gradient(135deg,var(--pink),#ff9dc0);display:grid;place-items:center;font-size:2rem;box-shadow:0 12px 28px rgba(244,114,160,.35)}
+#adminArea .login-card h1{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+#adminArea .login-card .sub{color:var(--gray);font-size:.85rem;margin-bottom:22px}
+#adminArea .field{margin-bottom:14px;text-align:right}
+#adminArea .field label{display:block;font-size:.85rem;font-weight:700;margin-bottom:6px}
+#adminArea .field input{width:100%;border:1.5px solid #f3d3e0;border-radius:14px;padding:13px 16px;font-size:1rem;outline:none;transition:.25s}
+#adminArea .field input:focus{border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
+#adminArea .err{background:#ffe9e9;color:#c33;border-radius:12px;padding:10px;font-size:.82rem;margin-bottom:12px;display:none}
+#adminArea .btn{width:100%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--pink),#ff7fae);color:#fff;font-size:1rem;font-weight:800;padding:14px;border-radius:16px;box-shadow:0 10px 25px rgba(244,114,160,.35);transition:.15s}
+#adminArea .btn:hover{transform:translateY(-2px)}
+#adminArea .btn:active{transform:scale(.97)}
+#adminArea .btn.ghost{background:#fff;color:var(--pink);border:1.5px solid var(--pink);box-shadow:none}
+#adminArea .btn.small{width:auto;padding:8px 18px;font-size:.85rem;border-radius:12px}
+#adminArea /* ===== اللوحة ===== */
+  #dashView{display:none}
+#adminArea #dashView.show{display:block}
+#adminArea header{display:flex;align-items:center;justify-content:space-between;padding:20px 4px}
+#adminArea .logo{display:flex;align-items:center;gap:10px;font-weight:800}
+#adminArea .logo .icon{width:42px;height:42px;border-radius:14px;background:var(--pink);display:grid;place-items:center;color:#fff;font-size:1.2rem;box-shadow:var(--shadow)}
+#adminArea .live{display:flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;color:var(--green)}
+#adminArea .live .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+#adminArea 0%, #adminArea 100%{opacity:1;transform:scale(1)}
+#adminArea 50%{opacity:.4;transform:scale(.8)}
+#adminArea .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0 24px}
+#adminArea .stat{background:#fff;border-radius:18px;padding:18px 10px;text-align:center;box-shadow:var(--shadow);border:1px solid #ffe9f2;transition:.2s}
+#adminArea .stat:hover{transform:translateY(-4px)}
+#adminArea .stat .num{font-size:1.8rem;font-weight:800;line-height:1.2}
+#adminArea .stat .lbl{font-size:.75rem;color:var(--gray);font-weight:700}
+#adminArea .stat.s-new .num{color:var(--pink)}
+#adminArea .stat.s-wait .num{color:var(--amber)}
+#adminArea .stat.s-done .num{color:var(--green)}
+#adminArea .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+#adminArea .tab{border:1.5px solid #f3d3e0;background:#fff;color:var(--gray);padding:8px 18px;border-radius:999px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s}
+#adminArea .tab.active{background:var(--pink);border-color:var(--pink);color:#fff;box-shadow:0 6px 18px rgba(244,114,160,.3)}
+#adminArea .msg-item{background:#fff;border:1px solid #ffe9f2;border-radius:18px;padding:16px 18px;margin-bottom:12px;box-shadow:0 4px 14px rgba(244,114,160,.07);animation:pop .4s ease both;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#adminArea .msg-item.unread{border-right:4px solid var(--pink)}
+#adminArea .msg-item .info{flex:1;min-width:150px}
+#adminArea .msg-item .code{font-size:.72rem;color:var(--gray);direction:ltr;display:inline-block}
+#adminArea .msg-item .preview{font-size:.85rem;color:#66666f;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+#adminArea .msg-item .time{font-size:.7rem;color:#bbb}
+#adminArea .pill{padding:4px 12px;border-radius:999px;font-size:.72rem;font-weight:800;white-space:nowrap}
+#adminArea .pill.new{background:var(--pink-soft);color:var(--pink)}
+#adminArea .pill.wait{background:#fff3d6;color:#9a7200}
+#adminArea .pill.done{background:#dcf7ea;color:#177a4c}
+#adminArea .empty{background:#fff;border:1.5px dashed #f3cfdd;border-radius:18px;padding:36px;text-align:center;color:var(--gray);font-size:.9rem}
+#adminArea /* ===== عرض الرسالة والرد ===== */
+  #msgView{display:none;margin-top:20px}
+#adminArea #msgView.show{display:block;animation:pop .4s ease}
+#adminArea .card{background:#fff;border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow);border:1px solid #ffe9f2}
+#adminArea .msg-bubble{background:var(--pink-bg);border:1px solid #ffe0ec;border-radius:14px 14px 14px 4px;padding:14px 16px;line-height:1.9;font-size:.95rem;margin:12px 0}
+#adminArea .msg-bubble.reply{background:#eefaf4;border-color:#c9ecd9;border-radius:14px 14px 4px 14px}
+#adminArea .who{font-size:.75rem;font-weight:800;color:var(--pink);display:block;margin-bottom:4px}
+#adminArea .msg-bubble.reply .who{color:var(--green)}
+#adminArea textarea{width:100%;min-height:120px;resize:vertical;border:1.5px solid #f3d3e0;border-radius:14px;padding:14px 16px;font-size:1rem;line-height:1.8;outline:none;transition:.25s;margin-top:8px}
+#adminArea textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
+#adminArea textarea::placeholder{color:#c3b3bc}
+#adminArea .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+#adminArea .actions .btn{flex:1;min-width:130px}
+#adminArea from{opacity:0;transform:translateY(20px)}
+#adminArea to{opacity:1;transform:translateY(0)}
+#adminArea .stats{gap:8px}
+#adminArea .stat{padding:14px 6px}
+#adminArea .stat .num{font-size:1.4rem}
+#adminArea{display:none}
+#adminArea .wrap{max-width:760px}
+
+  /* زر المرشد المخفي */
+  .counselor-fab{
+    position:fixed;bottom:14px;left:14px;width:40px;height:40px;
+    border-radius:13px;background:rgba(255,255,255,.85);border:1px solid #ffe0ec;
+    display:grid;place-items:center;font-size:1.05rem;cursor:pointer;
+    opacity:.45;z-index:60;transition:.2s;backdrop-filter:blur(4px);
+    box-shadow:0 4px 12px rgba(244,114,160,.12);
+  }
+  .counselor-fab:hover{opacity:1;transform:scale(1.1)}
+  #adminArea .counselor-fab{display:none}
+</style>
+</head>
+<body>
+
+<!-- ================= منصة الطالب ================= -->
+<div id="stuView">
+<div class="wrap">
+
+
+  <header>
+    <div class="logo"><div class="icon">💬</div><div>Secret message</div></div>
+    <div class="badge">🔒 خاص وآمن</div>
+  </header>
+
+  <section class="hero">
+    <div class="lock">🕊️</div>
+    <h1>تواصل مع <span>المرشد المدرسي</span></h1>
+    <p>رسالتك تصل إلى المرشد دون الحاجة إلى كتابة اسمك.<br>يمكنك مشاركة ما يشغلك أو طلب المساعدة أو تقديم اقتراح بكل خصوصية.</p>
+  </section>
+
+  <!-- ===== نموذج الإرسال ===== -->
+  <div class="card" id="formCard">
+    <h2>🔒 رسالة مجهولة</h2>
+    <p class="sub">اكتب بحرّية.. لا أحد يعرف من أنت.</p>
+
+    <label>موضوع الرسالة</label>
+    <div class="subject-box">🏷️ ( مجهول )</div>
+
+    <label for="msg">رسالتك</label>
+    <textarea id="msg" maxlength="800" placeholder="اكتب رسالتك هنا...&#10;&#10;مثلاً: لدي مشكلة في أحد الأمور داخل المدرسة وأحتاج إلى نصيحة."></textarea>
+    <div class="hint"><span>🔒 لا تحتاج إلى كتابة اسمك أو معلومات تكشف هويتك.</span><span id="counter">0 / 800</span></div>
+
+    <div class="filter-preview" id="filterPreview"></div>
+
+    <button class="btn" id="sendBtn">📩 إرسال الرسالة</button>
+  </div>
+
+  <!-- ===== شاشة النجاح ===== -->
+  <div class="card success" id="successCard">
+    <div class="check">✅</div>
+    <h2>تم إرسال رسالتك بنجاح</h2>
+    <p class="sub">رمز المتابعة الخاص برسالتك:</p>
+    <div class="code-box" id="trackCode">----</div>
+    <button class="copy-btn" id="copyBtn">📋 نسخ الرمز</button>
+    <p class="sub" style="margin-top:14px">🔑 احتفظ بهذا الرمز. ستحتاج إليه لمعرفة رد المرشد لاحقًا.</p>
+    <button class="btn ghost" id="newMsgBtn">✍️ إرسال رسالة أخرى</button>
+  </div>
+
+  <!-- ===== المتابعة ===== -->
+  <div class="card">
+    <h2>💬 هل تريد معرفة رد المرشد؟</h2>
+    <p class="sub">أدخل رمز المتابعة الذي حصلت عليه عند إرسال رسالتك.</p>
+    <input class="track-input" id="trackInput" placeholder="A7K-294" maxlength="8">
+    <button class="btn green" id="trackBtn">🔍 عرض الرد</button>
+    <p class="error-text" id="trackError">⚠️ لم يتم العثور على رسالة بهذا الرمز. تأكد من كتابته بشكل صحيح.</p>
+
+    <div class="reply-view" id="replyView">
+      <div style="margin-bottom:10px"><span class="status-pill wait" id="statusPill">بانتظار الرد</span></div>
+      <div class="msg-bubble"><span class="who">📝 رسالتك</span><span id="myMsg"></span></div>
+      <div class="msg-bubble reply" id="replyBubble"><span class="who">👨‍🏫 رد المرشد</span><span id="counselorReply"></span></div>
+    </div>
+  </div>
+
+  <!-- ===== الرسائل الإرشادية ===== -->
+  <div class="card">
+    <h2>🌱 رسائل إرشادية</h2>
+    <p class="sub">كلمات قصيرة قد تصنع فرقًا كبيرًا.</p>
+    <div class="tips" id="tipsBox"></div>
+  </div>
+
+  <footer>
+    <b>مدرسة السلام الثانوية الشاملة المختلطة</b><br>
+    منصة التواصل والإرشاد الطلابي<br>
+    <span style="font-size:.72rem">سياسة الخصوصية: "مجهول" تعني أنك لا تكتب اسمك داخل الرسالة، وقد تُحفظ سجلات تقنية أساسية على خادم المدرسة لأمان المنصة.</span>
+  </footer>
+
+
+</div>
+</div>
+
+<button class="counselor-fab" id="fabAdmin" title="المرشد المدرسي">🛡️</button>
+
+<!-- ================= لوحة المرشد ================= -->
+<div id="adminArea">
+<div class="wrap">
+
+
+  <!-- ===== تسجيل الدخول ===== -->
+  <div id="loginView">
+    <div class="login-card">
+      <div class="login-icon">👨‍🏫</div>
+      <h1>لوحة المرشد المدرسي</h1>
+      <p class="sub">مدرسة السلام الثانوية الشاملة المختلطة<br>منطقة خاصة — للمرشد فقط</p>
+      <div class="err" id="loginErr">⚠️ اسم المستخدم أو كلمة المرور غير صحيحة</div>
+      <div class="field">
+        <label>اسم المستخدم</lab
